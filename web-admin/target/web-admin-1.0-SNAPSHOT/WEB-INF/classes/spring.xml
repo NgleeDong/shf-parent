@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:contexr="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring.xsd">
+
+
+
+    <!--    开启组件扫描【排除Controller层】-->
+    <contexr:component-scan base-package="com.ikun" use-default-filters="false">
+        <contexr:include-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
+        <contexr:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+    </contexr:component-scan>
+
+    <!--    - 加载外部属性文件-->
+    <contexr:property-placeholder location="classpath:db.properties"></contexr:property-placeholder>
+    <!--    - 装配数据源【DruidDataSource】-->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="driverClassName" value="${db.driverClassName}"></property>
+        <property name="url" value="${db.url}"></property>
+        <property name="username" value="${db.username}"></property>
+        <property name="password" value="${db.password}"></property>
+    </bean>
+    <!--    - 装配事务管理器【DataSourceTransactionManager】-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+    <!--    - 开启声明式事务管理注解支持-->
+    <tx:annotation-driven transaction-manager="transactionManager"></tx:annotation-driven>
+
+
+<!--    整合Mybatis-->
+
+    <!--    1、装配SqISessionFactoryBean，管理SqlSessionFactory-->
+    <bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--        配置数据源属性-->
+        <property name="dataSource" ref="dataSource"></property>
+        <!--        配置Mybatis全局配置文件的路径-->
+        <property name="configLocation" value="classpath:mybatis-config.xml"></property>
+        <!--        设置Java类型别名:在这里写好，就不用在Mybatis全局配置文件mybatis-config.xml中写了-->
+        <property name="typeAliasesPackage" value="com.ikun.entity"></property>
+        <!--        配置Mapper映射文件的路径-->
+        <property name="mapperLocations" value="classpath:mapper/*.xml"></property>
+    </bean>
+    <!--    2、 装配MapperScannerConfigurer，管理Mapper代理对象-->
+    <!--    现在用如下方式：使用之后，com.ikun.mapper下的所有接口都会有相应的代理对象-->
+    <mybatis-spring:scan base-package="com.ikun.mapper"></mybatis-spring:scan>
+
+</beans>
