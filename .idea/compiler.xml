@@ -6,8 +6,10 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="server-api" />
         <module name="common-util" />
         <module name="model" />
+        <module name="service-acl" />
         <module name="web-admin" />
       </profile>
     </annotationProcessing>

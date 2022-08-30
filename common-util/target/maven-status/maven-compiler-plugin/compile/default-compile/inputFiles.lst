@@ -1,5 +1,9 @@
 G:\Java\shf-parent\common-util\src\main\java\com\ikun\result\Result.java
 G:\Java\shf-parent\common-util\src\main\java\com\ikun\result\ResultCodeEnum.java
+G:\Java\shf-parent\common-util\src\main\java\com\ikun\mapper\BaseMapper.java
+G:\Java\shf-parent\common-util\src\main\java\com\ikun\controller\BaseController.java
+G:\Java\shf-parent\common-util\src\main\java\com\ikun\service\BaseService.java
 G:\Java\shf-parent\common-util\src\main\java\com\ikun\util\CastUtil.java
 G:\Java\shf-parent\common-util\src\main\java\com\ikun\util\MD5.java
 G:\Java\shf-parent\common-util\src\main\java\com\ikun\util\WebUtil.java
+G:\Java\shf-parent\common-util\src\main\java\com\ikun\service\Impl\BaseServiceImpl.java
