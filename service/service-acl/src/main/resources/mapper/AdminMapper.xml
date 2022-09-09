@@ -81,5 +81,12 @@
         set is_deleted = 1
         where id = #{id}
     </delete>
+    
+<!--    查询所有用户 -->
+    <select id="findAll" resultType="admin">
+        <include refid="column"></include>
+        from acl_admin
+        where is_deleted = 0
+    </select>
 
 </mapper>

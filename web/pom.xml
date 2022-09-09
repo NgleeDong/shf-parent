@@ -15,6 +15,7 @@
 
     <modules>
         <module>web-admin</module>
+        <module>web-front</module>
     </modules>
 
 

@@ -11,8 +11,10 @@ public class HouseVo implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
+	//查询 hse_community 表
 	private String communityName;
 
+	//查询 hse_house 表
 	private Long id;
 	private String name;
 	private String buildArea;

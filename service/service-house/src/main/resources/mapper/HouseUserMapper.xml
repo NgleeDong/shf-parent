@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ikun.mapper.HouseUserMapper">
+    <!--    用于select查询公用抽取的列-->
+    <sql id="column">
+        select id,house_id,name,phone,sex,id_no,create_time,update_time,is_deleted
+    </sql>
+
+    <!--    根据房源id获取房东列表-->
+    <select id="getHouseUserById" resultType="houseuser">
+        <include refid="column"></include>
+        from hse_house_user
+        where house_id = #{id} and is_deleted = 0
+    </select>
+
+<!--    新增房东-->
+    <insert id="insert">
+        insert into hse_house_user(house_id,name,phone,sex,id_no)
+        values (#{houseId},#{name},#{phone},#{sex},#{idNo})
+    </insert>
+
+<!--    根据id获取房东信息-->
+    <select id="getById" resultType="houseuser">
+        <include refid="column"></include>
+        from hse_house_user
+        where id = #{id}
+    </select>
+
+<!--    更新-->
+    <update id="update">
+        update hse_house_user
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="phone != null and phone != ''">
+                phone = #{phone},
+            </if>
+            <if test="sex != null">
+                sex = #{sex},
+            </if>
+            <if test="idNo != null and idNo != ''">
+                id_no = #{idNo},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+<!--    删除-->
+    <update id="delete">
+        update hse_house_user
+        set is_deleted = 1
+        where id = #{id}
+    </update>
+
+</mapper>

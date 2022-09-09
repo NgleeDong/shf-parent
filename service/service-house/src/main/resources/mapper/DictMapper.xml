@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ikun.mapper.DictMapper">
+
+<!--    用于select查询公用抽取的列-->
+    <sql id="column">
+        select id,parent_id,name,dict_code,create_time,update_time,is_deleted
+    </sql>
+
+<!--    根据父id查询该节点下所有的子节点-->
+    <select id="findListByParentId" resultType="dict">
+        <include refid="column"></include>
+        from hse_dict
+        where parent_id = #{parentId}
+    </select>
+
+<!--    判断某个节点是否是父节点:通过它的id查询其子节点的数量是否 > 0-->
+    <select id="isParentNode" resultType="boolean">
+    <![CDATA[
+        select count(*)
+        from hse_dict
+        where parent_id = #{parentId}
+        ]]>
+  </select>
+
+<!--    当SQL执行的结果是0，那么返回false；如果结果是非0，无论是正数还是负数（当然上述例子不会产生负数）都为true-->
+
+
+<!--    根据编码获取Dict对象，如传的dictCode是“beijing”-->
+    <select id="getDictByDictCode" resultType="dict">
+        <include refid="column"></include>
+        from hse_dict
+        where dict_code = #{dictCode}
+    </select>
+
+<!--    根据id获取name-->
+    <select id="getNameById" resultType="string">
+        select name from hse_dict where id = #{id}
+    </select>
+
+</mapper>

@@ -11,10 +11,13 @@ public class UserFollowVo implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
+	//=========================== user_follow表
 	private Long id;
 	private Long houseId;
 	private Date createTime;
+	//=========================== hse_community表
 	private String communityName;
+	//=========================== hse_house表
 	private String name;
 	private String buildArea;
 	private BigDecimal totalPrice;

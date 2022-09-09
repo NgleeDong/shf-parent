@@ -9,6 +9,8 @@ import com.ikun.service.Impl.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Transactional
 @Service(interfaceClass = AdminService.class)
 public class AdminServiceImpl extends BaseServiceImpl<Admin> implements AdminService {
@@ -19,5 +21,10 @@ public class AdminServiceImpl extends BaseServiceImpl<Admin> implements AdminSer
     @Override
     protected BaseMapper<Admin> getEntityMapper() {
         return this.adminMapper;
+    }
+
+    @Override
+    public List<Admin> findAll() {
+        return adminMapper.findAll();
     }
 }

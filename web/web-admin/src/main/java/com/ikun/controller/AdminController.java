@@ -3,15 +3,18 @@ package com.ikun.controller;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.github.pagehelper.PageInfo;
 import com.ikun.entity.Admin;
+import com.ikun.entity.HouseImage;
+import com.ikun.result.Result;
 import com.ikun.service.AdminService;
+import com.ikun.util.QiniuUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/admin")
@@ -92,6 +95,49 @@ public class AdminController extends BaseController{
         adminService.delete(id);
         //不弹窗的：重定向到查询所有角色的方法
         return "redirect:/admin";
+    }
+
+    /**
+     * 去上传头像的页面
+     */
+    @RequestMapping("/uploadShow/{id}")
+    public String toUpLoad(@PathVariable("id") Long id, Map map) {
+        map.put("id", id);
+        return "admin/upload";
+    }
+
+    /**
+     * 上传头像
+     */
+
+    @RequestMapping("/upload/{id}")
+    public String upload(@PathVariable("id") Long id,
+                         @RequestParam("file") MultipartFile[] files) {
+        try {
+            if (files != null && files.length > 0) {
+                for (MultipartFile file : files) {
+                    //获取字节数组
+                    byte[] bytes = file.getBytes();
+                    //获取图片的名字（真实的名字）
+                    String filename = file.getOriginalFilename();
+                    //通过UUID随机生成一个字符串
+                    String newFileName = UUID.randomUUID().toString();
+                    //通过Qiniu工具类上传图片到七牛云
+                    QiniuUtil.upload2Qiniu(bytes, newFileName);
+                    //创建Admin对象
+                    Admin admin = new Admin();
+                    admin.setId(id);
+                    //设置图片路径
+                    //路径的组成：http://七牛云的域名/随机生成的文件新名字
+                    admin.setHeadUrl("http://rhs87z6s9.hn-bkt.clouddn.com/" + newFileName);
+                    //更新
+                    adminService.update(admin);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return SUCCESS_PAGE;
     }
 
 }
