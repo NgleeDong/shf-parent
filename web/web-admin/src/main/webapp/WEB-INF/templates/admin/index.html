@@ -65,6 +65,7 @@
                   <a class="edit" th:attr="data-id=${item.id}">修改</a>
                   <a class="delete" th:attr="data-id=${item.id}">删除</a>
                   <a class="upload" th:attr="data-id=${item.id}">上传头像</a>
+                  <a class="assign" th:attr="data-id=${item.id}">分配角色</a>
                 </td>
               </tr>
               </tbody>
@@ -94,6 +95,10 @@
     $(".upload").on("click",function(){
       var id = $(this).attr("data-id");
       opt.openWin('/admin/uploadShow/'+id,'上传头像',580,300);
+    });
+    $(".assign").on("click",function () {
+      var id = $(this).attr("data-id");
+      opt.openWin('/admin/assignShow/'+id,'分配角色',550,450)
     });
   });
 </script>

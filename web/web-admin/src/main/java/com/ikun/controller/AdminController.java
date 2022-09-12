@@ -6,9 +6,11 @@ import com.ikun.entity.Admin;
 import com.ikun.entity.HouseImage;
 import com.ikun.result.Result;
 import com.ikun.service.AdminService;
+import com.ikun.service.RoleService;
 import com.ikun.util.QiniuUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,8 +27,11 @@ public class AdminController extends BaseController{
     @Reference
     private AdminService adminService;
 
+    @Reference
+    private RoleService roleService;
+
     /**
-     * 分页及待条件的查询
+     * 分页及带条件的查询
      */
     @RequestMapping
     public String findPage(Map map, HttpServletRequest request) {
@@ -140,4 +145,26 @@ public class AdminController extends BaseController{
         return SUCCESS_PAGE;
     }
 
+    /**
+     * 去分配角色的页面
+     */
+    //opt.openWin('/admin/assignShow/'+id,'分配角色',550,450)
+    @RequestMapping("/assignShow/{adminId}")
+    public String assignShow(@PathVariable("adminId") Long adminId, ModelMap modelMap) {
+        //需要带三个东西：adminId、assignRoleList、unAssignRoleList
+        Map<String, Object> roleMap = roleService.findRoleByAdminId(adminId);
+        modelMap.addAllAttributes(roleMap);
+        modelMap.addAttribute("adminId", adminId);
+        return "admin/assignShow";
+    }
+
+    /**
+     * 给用户分配角色功能实现
+     */
+    @RequestMapping("/assignRole")
+    public String assignRole(@RequestParam("adminId") Long adminId,
+                             @RequestParam("roleIds") Long[] roleIds) {
+        roleService.assignRole(adminId, roleIds);
+        return SUCCESS_PAGE;
+    }
 }

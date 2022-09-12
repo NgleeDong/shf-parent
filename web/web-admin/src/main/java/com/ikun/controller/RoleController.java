@@ -3,6 +3,7 @@ package com.ikun.controller;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.github.pagehelper.PageInfo;
 import com.ikun.entity.Role;
+import com.ikun.service.PermissionService;
 import com.ikun.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,6 +11,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Enumeration;
@@ -24,6 +26,9 @@ public class RoleController extends BaseController {
 
     @Reference
     private RoleService roleService;
+
+    @Reference
+    private PermissionService permissionService;
 
 //    @RequestMapping
 //    public String findAll(Map map) {
@@ -143,5 +148,31 @@ public class RoleController extends BaseController {
 //
 //        return filters;
 //    }
+
+
+    /**
+     * 去给角色分配权限的页面
+     */
+    //opt.openWin("/role/assignShow/"+id,'修改',580,430);
+    @RequestMapping("/assignShow/{roleId}")
+    public String assignShow(@PathVariable("roleId") Long roleId, ModelMap modelMap) {
+        //传过去两个东西，roleId与zNodes
+        //调用根据角色id获取权限的方法
+        List<Map<String, Object>> zNodes = permissionService.findPermissionByRoleId(roleId);
+        modelMap.addAttribute("zNodes",zNodes);
+        modelMap.addAttribute("roleId", roleId);
+        return "role/assignShow";
+    }
+
+    /**
+     * 给角色分配权限功能实现
+     */
+    @RequestMapping("/assignPermission")
+    public String assignPermission(@RequestParam("roleId") Long roleId,
+                                   @RequestParam("permissionIds") Long[] permissionIds) {
+        //思路也是先删除后添加
+        permissionService.assignPermission(roleId, permissionIds);
+        return SUCCESS_PAGE;
+    }
 
 }
