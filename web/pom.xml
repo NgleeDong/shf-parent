@@ -38,6 +38,19 @@
             <artifactId>server-api</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+
+        <!--spring-session 同步-->
+        <dependency>
+            <groupId>org.springframework.session</groupId>
+            <artifactId>spring-session-data-redis</artifactId>
+            <!--进行依赖排除，排除AOP的jar包-->
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-aop</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
     </dependencies>
 
 </project>

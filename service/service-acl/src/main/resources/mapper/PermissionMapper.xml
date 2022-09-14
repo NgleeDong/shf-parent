@@ -72,4 +72,24 @@
         from acl_permission
         where id = #{id}
     </select>
+
+<!--    获取所有的权限码-->
+    <select id="getAllPermissionCodes" resultType="string">
+        select code
+        from acl_permission
+        where type = 2 and is_deleted = 0
+    </select>
+
+<!--    根据用户id查询对应的权限码-->
+    <select id="getPermissionCodesByAdminId" resultType="string">
+        select ap.code
+        from acl_admin_role aar
+                 left join acl_role_permission arp on aar.role_id = arp.role_id
+                 left join acl_permission ap on arp.permission_id = ap.id
+        where aar.admin_id = #{id} and
+            aar.is_deleted = 0 and
+            arp.is_deleted = 0 and
+            ap.is_deleted = 0 and
+            ap.type = 2
+    </select>
 </mapper>

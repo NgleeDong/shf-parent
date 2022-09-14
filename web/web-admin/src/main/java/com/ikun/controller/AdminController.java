@@ -9,6 +9,7 @@ import com.ikun.service.AdminService;
 import com.ikun.service.RoleService;
 import com.ikun.util.QiniuUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +30,9 @@ public class AdminController extends BaseController{
 
     @Reference
     private RoleService roleService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     /**
      * 分页及带条件的查询
@@ -60,6 +64,8 @@ public class AdminController extends BaseController{
      */
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public String saveAdmin(Admin admin) { //pojo入参
+        //对admin对象中的密码进行加密
+        admin.setPassword(passwordEncoder.encode(admin.getPassword()));
         adminService.insert(admin);
         //弹窗的需要进入SUCCESS_PAGE，不弹窗的则是重定向
         return SUCCESS_PAGE;

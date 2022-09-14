@@ -86,7 +86,7 @@ public class PermissionServiceImpl extends BaseServiceImpl<Permission> implement
     @Override
     public List<Permission> findMenuPermissionByAdminId(Long adminId) {
         List<Permission> permissionList = null;
-        if (adminId == 1L) {
+        if (adminId == 1) {
             permissionList = permissionMapper.findAll();
         } else {
             permissionList = permissionMapper.findPermissionListByAdminId(adminId);
@@ -108,5 +108,21 @@ public class PermissionServiceImpl extends BaseServiceImpl<Permission> implement
         //构建树形结构
         List<Permission> result = PermissionHelper.bulid(allPermissionList);
         return result;
+    }
+
+    /**
+     * 通过用户id获取permissionCode
+     * @param id
+     * @return
+     */
+    @Override
+    public List<String> getPermissionCodeByAdminId(Long id) {
+        List<String> permissionCodeList = null;
+        if (id == 1) {
+            permissionCodeList = permissionMapper.getAllPermissionCodes();
+        } else {
+            permissionCodeList = permissionMapper.getPermissionCodesByAdminId(id);
+        }
+        return permissionCodeList;
     }
 }

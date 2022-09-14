@@ -7,9 +7,10 @@
 
 <!--    先扫描dubbo-->
     <import resource="spring-registry.xml"></import>
+    <import resource="spring-redis.xml"></import>
 
     <!--包扫描-->
-    <context:component-scan base-package="com.ikun.controller"></context:component-scan>
+    <context:component-scan base-package="com.ikun"></context:component-scan>
 
 
     <!--    - 装配视图解析器-->
@@ -27,6 +28,12 @@
                         <property name="templateMode" value="HTML5"/>
                         <property name="characterEncoding" value="UTF-8" />
                     </bean>
+                </property>
+                <!-- 添加spring security 标签支持：sec -->
+                <property name="additionalDialects">
+                    <set>
+                        <bean class="org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect" />
+                    </set>
                 </property>
             </bean>
         </property>

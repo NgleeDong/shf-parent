@@ -27,4 +27,9 @@ public class AdminServiceImpl extends BaseServiceImpl<Admin> implements AdminSer
     public List<Admin> findAll() {
         return adminMapper.findAll();
     }
+
+    @Override
+    public Admin geAdminByUsername(String username) {
+        return adminMapper.getAdminByUsername(username);
+    }
 }

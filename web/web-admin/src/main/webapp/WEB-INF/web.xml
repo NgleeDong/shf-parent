@@ -16,6 +16,17 @@
 <!--        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>-->
 <!--    </listener>-->
 
+    <!-- spring session共享filter -->
+    <!-- 该过滤器必须是第一个过滤器，所有的请求经过该过滤器后执行后续操作 -->
+    <filter>
+        <filter-name>springSessionRepositoryFilter</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>springSessionRepositoryFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
     <!--    注意：CharacterEncodingFilter必须注册在第一过滤器位置-->
     <!--    注册CharacterEncodingFilter：解决请求&相应乱码问题-->
     <filter>
@@ -64,5 +75,16 @@
         <servlet-name>DispatcherServlet</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
+
+    <!-- SpringSecurity Filter -->
+    <!-- DelegatingFilterProxy用于整合第三方框架（代理过滤器，非真正的过滤器，真正的过滤器需要在spring的配置文件） -->
+    <filter>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
 </web-app>

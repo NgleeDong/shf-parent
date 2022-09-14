@@ -5,6 +5,18 @@
          id="WebApp_ID" version="3.0">
     <display-name>web</display-name>
 
+
+    <!-- spring session共享filter -->
+    <!-- 该过滤器必须是第一个过滤器，所有的请求经过该过滤器后执行后续操作 -->
+    <filter>
+        <filter-name>springSessionRepositoryFilter</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>springSessionRepositoryFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
     <!--    注意：CharacterEncodingFilter必须注册在第一过滤器位置-->
     <!--    注册CharacterEncodingFilter：解决请求&响应乱码问题-->
     <filter>

@@ -8,4 +8,6 @@ import java.util.List;
 @Repository
 public interface AdminMapper extends BaseMapper<Admin>{
     List<Admin> findAll();
+
+    Admin getAdminByUsername(String username);
 }

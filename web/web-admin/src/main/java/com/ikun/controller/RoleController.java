@@ -6,6 +6,7 @@ import com.ikun.entity.Role;
 import com.ikun.service.PermissionService;
 import com.ikun.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,6 +42,7 @@ public class RoleController extends BaseController {
     /**
      * 分页及带条件查询
      */
+    @PreAuthorize("hasAuthority('role.show')")
     @RequestMapping
     public String index(Map map, HttpServletRequest request) {
         //获取请求参数
@@ -60,6 +62,7 @@ public class RoleController extends BaseController {
      * 处理请求 /role/create,去添加角色的页面
      * @return
      */
+    @PreAuthorize("hasAuthority('role.create')")
     @RequestMapping("/create")
     public String toCreate() {
         return "role/create";
@@ -75,6 +78,7 @@ public class RoleController extends BaseController {
      *      description: 测试第二次
      * 问题二：为什么不用把RequestMapping的method中的方法改为POST？
      */
+    @PreAuthorize("hasAuthority('role.create')")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public String toSave(Role role) { //入参是pojo
         roleService.insert(role);
@@ -87,6 +91,7 @@ public class RoleController extends BaseController {
     /**
      * 点击修改，根据id查询Role，放入请求域中，去修改页面
      */
+    @PreAuthorize("hasAuthority('role.edit')")
     @RequestMapping("/edit/{id}")
     public String toEdit(@PathVariable("id") Long id, ModelMap modelMap) {
         Role role = roleService.getById(id); //获取Role
@@ -99,6 +104,7 @@ public class RoleController extends BaseController {
      * 处理修改页面点击确认后的请求：进入成功页面
      * 同样也是表单提交：POST方式
      */
+    @PreAuthorize("hasAuthority('role.edit')")
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public String update(Role role) { //pojo入参
         roleService.update(role);
@@ -110,6 +116,7 @@ public class RoleController extends BaseController {
      * id是前台页面根据传过来的
      * 注意：此处是get请求，没有表单！前台页面只是一个a标签
      */
+    @PreAuthorize("hasAuthority('role.delete')")
     @RequestMapping(value = "/delete/{id}")
     public String delete(@PathVariable("id") Long id) {
         roleService.delete(id);
@@ -154,6 +161,7 @@ public class RoleController extends BaseController {
      * 去给角色分配权限的页面
      */
     //opt.openWin("/role/assignShow/"+id,'修改',580,430);
+    @PreAuthorize("hasAuthority('role.assign')")
     @RequestMapping("/assignShow/{roleId}")
     public String assignShow(@PathVariable("roleId") Long roleId, ModelMap modelMap) {
         //传过去两个东西，roleId与zNodes
@@ -167,6 +175,7 @@ public class RoleController extends BaseController {
     /**
      * 给角色分配权限功能实现
      */
+    @PreAuthorize("hasAuthority('role.assign')")
     @RequestMapping("/assignPermission")
     public String assignPermission(@RequestParam("roleId") Long roleId,
                                    @RequestParam("permissionIds") Long[] permissionIds) {
